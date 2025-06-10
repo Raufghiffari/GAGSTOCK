@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>GrowBot Monitor</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <style>
+    body {
+      font-family: monospace;
+      padding: 2rem;
+      background: #0f172a;
+      color: #f8fafc;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    pre {
+      font-size: 1.1rem;
+      background: #1e293b;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>GrowBot - Stock Terbaru</h1>
+  <pre id="output">Memuat data dari Firebase...</pre>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyClcqzdwSydgUfAnBkOjL3Xi4uP2G79DNs",
+      authDomain: "gagstock.firebaseapp.com",
+      databaseURL: "https://gagstock-default-rtdb.firebaseio.com",
+      projectId: "gagstock",
+      storageBucket: "gagstock.firebasestorage.app",
+      messagingSenderId: "1046558937778",
+      appId: "1:1046558937778:web:18fbbf9d2dfe0edf316fab"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const dbRef = firebase.database().ref('/grow_updates/latest');
+
+    dbRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const text = `GEAR:\n${(data.gear || []).join('\n')}\n\nSEEDS:\n${(data.seeds || []).join('\n')}`;
+        document.getElementById("output").textContent = text;
+      } else {
+        document.getElementById("output").textContent = "Belum ada data terkirim.";
+      }
+    });
+  </script>
+</body>
+</html>
